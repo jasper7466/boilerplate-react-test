@@ -10,6 +10,15 @@ const devTool = devMode ? 'inline-source-map' : undefined;
 const devServer = devMode ? { static: path.resolve(__dirname, './dist') } : undefined;
 const folder = 'dist';
 
+const styleHandler = devMode
+  ? 'style-loader'
+  : {
+      loader: MiniCssExtractPlugin.loader,
+      options: {
+        defaultExport: true,
+      },
+    };
+
 module.exports = {
   entry: path.resolve(__dirname, './src/index'),
   mode: mode,
@@ -19,16 +28,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              defaultExport: true,
-            },
-          },
-          'css-loader',
-          'postcss-loader',
-        ],
+        use: [styleHandler, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.tsx$/i,
