@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const EslintPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const postcss = require('postcss');
 
 const mode = process.env.NODE_ENV || 'development';
 const devMode = mode === 'development';
@@ -19,6 +20,20 @@ const styleHandler = devMode
       },
     };
 
+const cssLoaderWithModules = {
+  loader: 'css-loader',
+  options: {
+    modules: true,
+  },
+};
+
+const cssLoaderNoModules = {
+  loader: 'css-loader',
+  options: {
+    modules: false,
+  },
+};
+
 module.exports = {
   entry: path.resolve(__dirname, './src/index'),
   mode: mode,
@@ -28,7 +43,23 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [styleHandler, 'css-loader', 'postcss-loader'],
+        exclude: /\.module\.css$/i,
+        use: [styleHandler, cssLoaderNoModules, 'postcss-loader'],
+      },
+      {
+        test: /\.css$/i,
+        include: /\.module\.css$/i,
+        use: [styleHandler, cssLoaderWithModules, 'postcss-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        exclude: /\.module\.s[ac]ss$/i,
+        use: [styleHandler, cssLoaderNoModules, 'postcss-loader', 'sass-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        include: /\.module\.s[ac]ss$/i,
+        use: [styleHandler, cssLoaderWithModules, 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.tsx$/i,
