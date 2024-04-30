@@ -3,10 +3,7 @@
     "outDir": "./dist",
     "module": "ES6",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
@@ -31,5 +28,5 @@
     "webpack",
     "jest",
     "src/setupTests.ts"
-  ],
+  ]
 }
